@@ -1,40 +1,60 @@
-import Link from 'next/link'
-import { getArticles } from '@/lib/data/articles'
+'use client'
+
+import { useMemo, useState } from 'react'
 import ArticleCard from '@/components/reader/ArticleCard'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
+import { PretextToggle } from '@/components/demo/PretextToggle'
+import { WidthSlider } from '@/components/demo/WidthSlider'
+import { getArticles } from '@/lib/data/articles'
 
 export default function ArticlesPage() {
-  const articles = getArticles()
+  const [pretextEnabled, setPretextEnabled] = useState(true)
+  const [previewWidth, setPreviewWidth] = useState(1100)
+  const articles = useMemo(() => getArticles(), [])
+
+  const cardWidth = useMemo(() => {
+    const gap = 24
+    if (previewWidth >= 1280) return (previewWidth - (gap * 2)) / 3 
+    if (previewWidth >= 640) return (previewWidth - gap) / 2       
+    return previewWidth                                            
+  }, [previewWidth])
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold tracking-tight text-gray-900">
-            TextReader
-          </Link>
-          <span className="text-sm text-gray-400">
-            {articles.length} articles
-          </span>
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-20">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Articles</h1>
+            <ThemeToggle />
+          </div>
+          <div className="flex flex-wrap items-center gap-4">
+            <PretextToggle enabled={pretextEnabled} setPretextEnabled={setPretextEnabled} />
+            <WidthSlider 
+              label="Grid width" 
+              value={previewWidth} 
+              onChange={setPreviewWidth} 
+              min={400} 
+              max={1400} 
+              step={1} 
+            />
+          </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-10">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 tracking-tight">
-          Articles
-        </h1>
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {articles.map((article) => (
-            <Link
-              key={article.id}
-              href={`/articles/${article.id}`}
-              className="block"
-            >
-              <ArticleCard article={article} />
-            </Link>
-          ))}
+      <section className="px-6 py-10">
+        <div className="mx-auto" style={{ width: previewWidth }}>
+          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {articles.map((article) => (
+              <ArticleCard
+                key={article.id}
+                article={article}
+                currentWidth={cardWidth}
+                pretextEnabled={pretextEnabled}
+              />
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   )
 }

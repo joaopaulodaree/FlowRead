@@ -43,7 +43,6 @@ Deep work is not just a productivity hack — it's a superpower that can transfo
     date: "2026-03-15",
     readTime: 8,
     tags: ["productivity", "focus", "workflow"],
-    coverImage: "/images/deep-work.jpg",
   },
   {
     id: "react-server-components",
@@ -63,7 +62,6 @@ Best practices include using Server Components for data fetching and static cont
     date: "2026-03-10",
     readTime: 12,
     tags: ["react", "frontend", "web development"],
-    coverImage: "/images/react-server-components.jpg",
   },
   {
     id: "designing-data-intensive",

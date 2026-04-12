@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
 
 export const metadata: Metadata = {
-  title: 'TextReader — Fluid Article Reader',
-  description: 'A performance-focused article reader built for long-form reading',
+  title: 'FlowRead — Fluid Article Reader',
+  description: 'Performance-focused article reader',
 }
 
 export default function RootLayout({
@@ -12,9 +13,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased text-gray-900 bg-white">
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased bg-background text-foreground selection:bg-emerald-100 selection:text-emerald-900">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
