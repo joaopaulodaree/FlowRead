@@ -20,5 +20,59 @@
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .article-content {
+    color: rgb(var(--foreground));
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .article-content > * + * {
+    margin-top: 1.25rem;
+  }
+
+  .article-content a {
+    color: rgb(var(--foreground));
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-content blockquote {
+    border-left: 3px solid rgb(var(--border));
+    color: rgb(var(--muted-foreground));
+    padding-left: 1rem;
+  }
+
+  .article-content figure {
+    margin: 2rem 0;
+  }
+
+  .article-content img {
+    border-radius: 8px;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .article-content figcaption {
+    color: rgb(var(--muted-foreground));
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 0.5rem;
+  }
+
+  .article-content ul,
+  .article-content ol {
+    padding-left: 1.5rem;
+  }
+
+  .article-content ul {
+    list-style: disc;
+  }
+
+  .article-content ol {
+    list-style: decimal;
   }
 }

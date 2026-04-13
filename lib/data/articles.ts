@@ -1,23 +1,16 @@
-import { sampleArticles, Article, ArticleMetadata } from '@/lib/types/article'
+import { Article, ArticleMetadata } from '@/lib/types/article'
+import { fetchGuardianArticleById, fetchGuardianArticles } from './guardian'
 
-/**
- * Get all articles with their metadata.
- * In production, this would fetch from a CMS or MDX files.
- */
-export function getArticles(): ArticleMetadata[] {
-  return sampleArticles.map(({ content, ...meta }) => meta)
+export async function getArticles(): Promise<ArticleMetadata[]> {
+  const guardianArticles = await fetchGuardianArticles()
+  return guardianArticles.map(({ content, contentHtml, leadHtml, ...meta }) => meta)
 }
 
-/**
- * Get a single article by ID.
- */
-export function getArticleById(id: string): Article | undefined {
-  return sampleArticles.find((a) => a.id === id)
+export async function getArticleById(id: string): Promise<Article | undefined> {
+  return fetchGuardianArticleById(id)
 }
 
-/**
- * Get all article IDs for static params.
- */
-export function getArticleIds(): string[] {
-  return sampleArticles.map((a) => a.id)
+export async function getArticleIds(): Promise<string[]> {
+  const articles = await fetchGuardianArticles()
+  return articles.map((article) => article.id)
 }

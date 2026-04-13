@@ -18,7 +18,7 @@ export interface ArticleMeasurements {
 const preparedCache = new Map<string, ReturnType<typeof prepare>>()
 const articleMeasurementsCache = new Map<string, ArticleMeasurements>()
 
-const DEFAULT_FONT = '400 16px Inter'
+const DEFAULT_FONT = '400 16px Arial'
 const DEFAULT_LINE_HEIGHT = 26
 
 /**
@@ -33,7 +33,7 @@ function fallbackMeasureTextHeight(
   const fontSizeMatch = font.match(/(\d+)px/)
   const fontSize = fontSizeMatch ? Number.parseInt(fontSizeMatch[1], 10) : 16
 
-  // Estimativa baseada na largura média de caracteres da Inter/Sans
+  // Estimativa baseada na largura média de caracteres de fontes sans comuns
   const avgCharWidth = fontSize * 0.52
   const charsPerLine = Math.max(10, Math.floor(maxWidth / avgCharWidth))
 

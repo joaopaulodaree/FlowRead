@@ -11,7 +11,7 @@ interface ArticleCardProps {
   pretextEnabled: boolean
 }
 
-const CARD_FONT = '400 14px Inter, system-ui, sans-serif'
+const CARD_FONT = '400 14px Arial'
 const CARD_PADDING = 48 // p-6 (24px) + p-6 (24px) = 48px total
 const LINE_HEIGHT = 20
 const MIN_EXCERPT_HEIGHT = 60 // Altura mínima para mostrar o texto
@@ -53,7 +53,7 @@ export default function ArticleCard({ article, currentWidth, pretextEnabled }: A
   }, [article.excerpt, currentWidth, isHydrated, pretextEnabled])
 
   return (
-    <Link href={`/articles/${article.id}`} className="block h-full">
+    <Link href={`/articles/${encodeURIComponent(article.id)}`} className="block h-full">
       <article className="group bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col">
         {article.coverImage && (
           <div className="h-44 w-full bg-muted overflow-hidden">

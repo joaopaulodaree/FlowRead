@@ -1,11 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState, useEffect } from 'react'
-import { getCachedArticleMeasurements } from '@/lib/pretext'
+import { useState } from 'react'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
-import { PretextToggle } from '@/components/demo/PretextToggle'
 import { WidthSlider } from '@/components/demo/WidthSlider'
+import { ArticleContent } from '@/components/reader/ArticleContent'
 import type { Article } from '@/lib/types/article'
 
 interface ArticleReaderProps {
@@ -14,43 +13,14 @@ interface ArticleReaderProps {
   font?: string
 }
 
-const DEFAULT_FONT = '400 16px Inter'
-const DEFAULT_LINE_HEIGHT = 26
+const DEFAULT_FONT = '400 16px Arial'
 
 export function ArticleReader({
   article,
   maxWidth = 800,
   font = DEFAULT_FONT,
 }: ArticleReaderProps) {
-  const [pretextEnabled, setPretextEnabled] = useState(true)
   const [previewWidth, setPreviewWidth] = useState(maxWidth)
-  const [isHydrated, setIsHydrated] = useState(false)
-
-  useEffect(() => {
-    setIsHydrated(true)
-  }, [])
-
-  const wordCount = useMemo(() => {
-    return article.content.trim().split(/\s+/).filter(Boolean).length
-  }, [article.content])
-
-  const measurements = useMemo(() => {
-    if (!pretextEnabled || !isHydrated) {
-      return {
-        height: 0,
-        readingTime: Math.max(1, Math.ceil(wordCount / 200)),
-        wordCount,
-      }
-    }
-
-    return getCachedArticleMeasurements(
-      article.id,
-      article.content,
-      previewWidth,
-      font,
-      DEFAULT_LINE_HEIGHT,
-    )
-  }, [article.id, article.content, previewWidth, pretextEnabled, isHydrated, font, wordCount])
 
   return (
     <article className="min-h-screen bg-background">
@@ -63,8 +33,6 @@ export function ArticleReader({
             >
               ← Articles
             </Link>
-            <div className="h-4 w-px bg-border" />
-            <PretextToggle enabled={pretextEnabled} setPretextEnabled={setPretextEnabled} />
           </div>
 
           <div className="flex items-center gap-6">
@@ -89,28 +57,20 @@ export function ArticleReader({
             </p>
           </div>
 
-          <div
-            style={{
-              width: previewWidth,
-              height: isHydrated && pretextEnabled && measurements.height > 0 
-                ? `${measurements.height}px` 
-                : 'auto',
-              overflow: 'hidden',
-              position: 'relative',              
-            }}
-          >
-            <div
-              style={{
-                font: font,
-                lineHeight: `${DEFAULT_LINE_HEIGHT}px`,
-                whiteSpace: 'pre-wrap',
-                margin: 0,
-                padding: 0,
-                display: 'block'
-              }}
-            >
-              {article.content}
+          {article.leadHtml ? (
+            <div className="mb-8">
+              <ArticleContent content="" html={article.leadHtml} />
             </div>
+          ) : article.coverImage && (
+            <img
+              src={article.coverImage}
+              alt=""
+              className="mb-8 aspect-video w-full rounded-lg object-cover"
+            />
+          )}
+
+          <div style={{ font }}>
+            <ArticleContent content={article.content} html={article.contentHtml} />
           </div>
         </div>
       </main>
